@@ -18,6 +18,13 @@ function cadastrarDespesa(){
 
 	let despesa = new Despesa(ano.value, mes.value, dia.value, tipo.value, descricao.value, valor.value)
 
-	console.log(despesa)
+	gravar(despesa)
+}
+
+function gravar(d){
+	/* A biblioteca JSON é utilizada para realizar a comunicação de objetos literais da aplicação WEB com aplicações externas.
+	No caso em questão, está sendo utilizado para converter o objeto despesa em string e
+	enviá-lo para a aplicação local storage d browser. */
+	localStorage.setItem('despesa', JSON.stringify(d))
 }
 
