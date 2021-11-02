@@ -8,6 +8,16 @@ class Despesa{
 		this.descricao = descricao
 		this.valor = valor
 	}
+	//método para verificar se há algum dado faltando para registrar a despesa
+	validarDados(){
+		//for in percorrendo cada atributo do objeto despesa
+		for(let i in this){
+			if(this[i] == undefined || this[i] == '' || this[i] == null){
+				return false
+				}
+		}
+		return true
+	}
 }
 
 //Classe Bd, criada para resolver o problema de sobreposição de objetos na aplicação local storage
@@ -58,7 +68,15 @@ function cadastrarDespesa(){
 
 	let despesa = new Despesa(ano.value, mes.value, dia.value, tipo.value, descricao.value, valor.value)
 
-	bd.gravar(despesa)
+	//verificação se há dados faltando, antes do instanciamento da despesa
+	if(despesa.validarDados()){
+		bd.gravar(despesa)
+		//dialog de sucesso
+		$('#sucessoGravacao').modal('show')
+	} else{
+		//dialog de erro
+		$('#erroGravacao').modal('show')
+	}
 }
 
 
