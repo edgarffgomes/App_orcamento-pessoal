@@ -18,6 +18,8 @@ class Despesa{
 		}
 		return true
 	}
+
+
 }
 
 //Classe Bd, criada para resolver o problema de sobreposição de objetos na aplicação local storage
@@ -52,6 +54,29 @@ class Bd{
 
 		localStorage.setItem('id', id)
 	}
+
+	recuperarTodosRegistros(){
+
+		//array de despesa
+		let despesas = Array()
+		//recuperação do id para ser usado como parâmetro no loop de repetição para recuperar os objetos literais
+		let id = localStorage.getItem('id')
+
+		for (let i =1 ; i<=id; i++){
+
+			//recuperar a despesa
+			//A função JSON.parse() é utilizada para converter as strings JSON de volta para objetos literais
+			let despesa = JSON.parse(localStorage.getItem(i))
+
+			//caso o índice em questão tenha sido removido, o mesmo deverá ser pulado
+			if(despesa === null){
+				continue
+			}
+			despesas.push(despesa)
+		}
+		return despesas
+	}
+
 }
 
 //instância da classe Bd
@@ -71,7 +96,7 @@ function cadastrarDespesa(){
 	//verificação se há dados faltando, antes do instanciamento da despesa
 	if(despesa.validarDados()){
 
-		//bd.gravar(despesa)
+		bd.gravar(despesa)
 
 		//formatação dialog sucesso:
 		document.getElementById('modal_titulo').innerHTML = 'Registro inserido com sucesso!'
@@ -101,4 +126,50 @@ function cadastrarDespesa(){
 	}
 }
 
+//função para carregar a lista de despesas pra página de consultas
+function carregaListaDespesas(){
+	//o array recebe os objetos literais contendo as informações das despesas
+	let despesas = Array()
+	despesas = bd.recuperarTodosRegistros()
+
+	//selecionando o elemento tbody da tabela
+	let listaDespesas = document.getElementById('lista-despesas')
+
+	//percorrer o array despesa, listando cada despesa de forma dinâmica
+	despesas.forEach(function(d){
+		
+		//criando a linha(<tr>)
+		let linha = listaDespesas.insertRow()
+
+		//criando as colunas (<td>)
+		linha.insertCell(0).innerHTML = `${d.dia}/${d.mes}/${d.ano}`
+		linha.insertCell(1).innerHTML = `${d.descricao}`
+
+		//ajustar o tipo para aparecer os títulos, não os números
+		switch(parseInt(d.tipo)){
+			case 1:
+				d.tipo = 'Alimentação'
+			break
+
+			case 2:
+				d.tipo = 'Educação'
+			break
+
+			case 3:
+				d.tipo = 'Lazer'
+			break
+
+			case 4:
+				d.tipo = 'Saúde'
+			break
+
+			case 5:
+				d.tipo = 'Transporte'
+			break
+		}
+		linha.insertCell(2).innerHTML = `${d.tipo}`
+		linha.insertCell(3).innerHTML = `${d.valor}`
+
+	})
+}
 
