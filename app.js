@@ -163,7 +163,9 @@ function cadastrarDespesa(){
 		//limpando campos de inserção, após registro bem-sucedido
 		ano.value = ''
 		mes.value = ''
+		dia.value=''
 		descricao. value = ''
+		tipo.value=''
 		valor.value = ''
 	} else{
 
