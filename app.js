@@ -72,9 +72,59 @@ class Bd{
 			if(despesa === null){
 				continue
 			}
+			//recuperando id para ser a utilizado na exclusão de despesas
+			despesa.id = i
 			despesas.push(despesa)
 		}
 		return despesas
+	}
+
+	pesquisar(despesa){
+		let despesasFiltradas = Array()
+		despesasFiltradas = this.recuperarTodosRegistros()
+
+		//Comparando os registros com os parâmetros da pesquisa
+		//ano
+		if(despesa.ano != ''){
+			despesasFiltradas = despesasFiltradas.filter(d => d.ano == despesa.ano )
+		}
+
+		//mes
+
+		if(despesa.mes != ''){
+			despesasFiltradas = despesasFiltradas.filter(d => d.mes == despesa.mes )
+		}
+
+		//dia
+
+		if(despesa.dia != ''){
+			despesasFiltradas = despesasFiltradas.filter(d => d.dia == despesa.dia)
+		}
+
+		//descrição
+
+		if(despesa.descricao != ''){
+			despesasFiltradas = despesasFiltradas.filter(d => d.descricao == despesa.descricao)
+		}
+
+		//tipo
+
+		if(despesa.tipo != ''){
+			despesasFiltradas = despesasFiltradas.filter(d => d.tipo == despesa.tipo)
+		}
+
+		//valor
+
+		if(despesa.valor != ''){
+			despesasFiltradas = despesasFiltradas.filter(d => d.valor == despesa.valor)
+		}
+		console.log(despesasFiltradas)
+		return despesasFiltradas
+	}
+
+	remover(id){
+		//removendo itens do local storage
+		localStorage.removeItem(id)
 	}
 
 }
@@ -132,13 +182,16 @@ function cadastrarDespesa(){
 }
 
 //função para carregar a lista de despesas pra página de consultas
-function carregaListaDespesas(){
-	//o array recebe os objetos literais contendo as informações das despesas
-	let despesas = Array()
+function carregaListaDespesas(despesas = Array()){
+	
+	//caso não haja nenhuma pesquisa a ser feita, todas as despesas contidas no localStorage serão retornadas
+	if(despesas.length == 0){
 	despesas = bd.recuperarTodosRegistros()
+	}
 
 	//selecionando o elemento tbody da tabela
 	let listaDespesas = document.getElementById('lista-despesas')
+	listaDespesas.innerHTML = ''
 
 	//percorrer o array despesa, listando cada despesa de forma dinâmica
 	despesas.forEach(function(d){
@@ -148,7 +201,6 @@ function carregaListaDespesas(){
 
 		//criando as colunas (<td>)
 		linha.insertCell(0).innerHTML = `${d.dia}/${d.mes}/${d.ano}`
-		linha.insertCell(1).innerHTML = `${d.descricao}`
 
 		//ajustar o tipo para aparecer os títulos, não os números
 		switch(parseInt(d.tipo)){
@@ -172,9 +224,44 @@ function carregaListaDespesas(){
 				d.tipo = 'Transporte'
 			break
 		}
-		linha.insertCell(2).innerHTML = `${d.tipo}`
+		linha.insertCell(1).innerHTML = `${d.tipo}`
+		linha.insertCell(2).innerHTML = `${d.descricao}`
 		linha.insertCell(3).innerHTML = `${d.valor}`
 
+		//criar botão de exclusao
+		let btn = document.createElement("button")
+		btn.className = "btn btn-danger"
+		btn.innerHTML = '<i class="fas fa-times"></i>'
+		btn.id = `id_despesas: ${d.id}`
+		btn.onclick = function(){
+
+			let id = this.id.replace('id_despesas: ', '')
+			bd.remover(id)
+			window.location.reload()
+		}
+		linha.insertCell(4).append(btn)
+
 	})
+
 }
+
+	function pesquisarDespesa(){
+		//instanciando objeto a ser pesquisado
+		let ano = document.getElementById('ano').value
+		let mes = document.getElementById('mes').value
+		let dia = document.getElementById('dia').value
+		let descricao = document.getElementById('descricao').value
+		let tipo = document.getElementById('tipo').value
+		let valor = document.getElementById('valor').value
+
+		let despesa = new Despesa(ano, mes, dia, tipo, descricao, valor)
+
+		//realizando pesquisa no local storage
+		let despesas = bd.pesquisar(despesa)
+
+		//carregando lista de despesas correspondentes à pesquisa 
+		carregaListaDespesas(despesas)
+
+}
+
 
