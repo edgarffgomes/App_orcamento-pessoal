@@ -109,7 +109,12 @@ function cadastrarDespesa(){
 
 		//dialog de sucesso
 		$('#registraDespesa').modal('show')
-		
+
+		//limpando campos de inserção, após registro bem-sucedido
+		ano.value = ''
+		mes.value = ''
+		descricao. value = ''
+		valor.value = ''
 	} else{
 
 		//formatação dialog erro:
