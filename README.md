@@ -15,6 +15,7 @@
   <tr>
     <td> HTML5 </td>
     <td> CSS3 </td>
+    <td> Bootstrap 4 </td>
     <td> Javascript </td>
     <td> Ecmascript 6 </td>
   </tr>
