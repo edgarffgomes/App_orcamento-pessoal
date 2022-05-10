@@ -1,2 +1,25 @@
-# App_orcamento-pessoal
-Aplicativo para cadastro de despesas desenvolvido com Javascript, ES6. A aplicação utiliza o recurso de local storage do browser para armazenar os dados. (As estruturas HTML são padrão do projeto e não foram implementadas por mim)
+# App de orçamento pessoal
+
+
+> Status: Completo ✅
+> 
+### Projeto de construção de site que armazena despesas para controle financeiro.
+
+## Funcionalidades implementadas:
++ Persistência de dados em Local Storage
++ Responsividade
+
+## Tecnologias utilizadas
+
+<table>
+  <tr>
+    <td> HTML5 </td>
+    <td> CSS3 </td>
+    <td> Javascript </td>
+    <td> Ecmascript 6 </td>
+  </tr>
+</table>
+
+## Link de acesso:
+
+https://edgarffgomes.github.io/App_orcamento-pessoal/index.html
